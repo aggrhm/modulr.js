@@ -1,0 +1,7 @@
+{
+	"name": "modulr",
+	"version": "0.0.1",
+	"main": [
+		"./dist/modulr.js"
+	]
+}
