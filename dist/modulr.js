@@ -14,6 +14,7 @@
 
 		load: function(opts) {
 			var files = [];
+			var done = false;
 
 			// find all files
 			opts.modules.forEach(function(name) {
@@ -23,14 +24,15 @@
 			console.log(files.join(","));
 
 			var checkReady = function() {
-				var done = files.every(function(url) {
+				if (done) return;
+				done = files.every(function(url) {
 					var fs = Modulr.cache[url];
 					return (fs && fs.is_waiting == false);
 				});
 				if (done) {
 					// all files loaded
 					var has_error = checkError();
-					opts.callback(has_error);
+					opts.callback(!has_error);
 				}
 			};
 			var checkError = function() {
