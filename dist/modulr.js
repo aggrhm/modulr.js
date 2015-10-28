@@ -8,8 +8,10 @@
 		cache: {},
 		listeners: [],
 
-		register: function(name, files) {
-			Modulr.modules[name] = {files: files};
+		register: function(name, files, opts) {
+			opts = opts || {};
+			opts.files = files;
+			Modulr.modules[name] = opts;
 		},
 
 		load: function(opts) {
@@ -18,7 +20,14 @@
 
 			// find all files
 			opts.modules.forEach(function(name) {
-				files.push.apply(files, Modulr.modules[name].files);
+				var module = Modulr.modules[name];
+				module.files.forEach(function(file) {
+					var furl = file;
+					if (typeof(module.timestamp) != 'undefined') {
+						furl = furl + "?t=" + module.timestamp;
+					}
+					files.push(furl);
+				});
 			});
 			console.log(opts.modules.join(","));
 			console.log(files.join(","));
@@ -53,9 +62,10 @@
 
 		loadURL: function(url, callback) {
 			var fn = null;
-			if (url.match(JS_REG)) {
+			var tu = url.split("?")[0];
+			if (tu.match(JS_REG)) {
 				fn = Modulr.loadScript;
-			} else if (url.match(CSS_REG)) {
+			} else if (tu.match(CSS_REG)) {
 				fn = Modulr.loadStyleSheet;
 			} else {
 				fn = Modulr.loadTemplateFile;
