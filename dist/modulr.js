@@ -29,8 +29,8 @@
 					files.push(furl);
 				});
 			});
-			console.log(opts.modules.join(","));
-			console.log(files.join(","));
+			//console.log(opts.modules.join(","));
+			//console.log(files.join(","));
 
 			var checkReady = function() {
 				if (done) return;
